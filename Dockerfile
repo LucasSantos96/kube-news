@@ -1,23 +1,19 @@
 FROM node:20.10.0-alpine3.18
 
-#cria automaticamente o diretório home do usuário
-# O parâmetro -m cria automaticamente o diretório home
-# Exemplo: /home/lucas
-RUN useradd -m lucas
+RUN addgroup -S lucas && adduser -S lucas -G lucas
 
 WORKDIR /app
 
-# Copia os arquivos package.json e package-lock.json para o diretório de trabalho, garantindo que o usuário "lucas" seja o proprietário dos arquivos
-COPY --chown=lucas:lucas /src/package*.json .
-
-# Muda o usuário para "lucas" para as próximas instruções
-USER lucas
+COPY /src/package*.json ./
 
 RUN npm install
 
-# Copia o restante dos arquivos do projeto para o diretório de trabalho, garantindo que o usuário "lucas" seja o proprietário dos arquivos
-COPY --chown=lucas:lucas /src .
+COPY /src ./
 
-EXPOSE 8080 
+RUN chown -R lucas:lucas /app
+
+USER lucas
+
+EXPOSE 8080
 
 CMD ["node", "server.js"]

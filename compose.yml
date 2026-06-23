@@ -16,7 +16,7 @@ services:
 
 
     kube_news:
-        image: lucas9625/kube-news:${KUBE_TAG}
+        image: lucas9625/kube-news:${KUBE_TAG:-latest}
         build:
             context: .
             dockerfile: Dockerfile
@@ -32,7 +32,7 @@ services:
             DB_USER: ${POSTGRES_USER}
             DB_PASSWORD: ${POSTGRES_PASSWORD}
             DB_DATABASE: ${POSTGRES_DB}
-            DB_HOST: ${POSTGRES_HOST}
+            DB_HOST: ${POSTGRES_HOST:-postgres}
 
 
 
